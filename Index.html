@@ -1,0 +1,571 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RS CAB - Taxi Booking</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f3f5f9;
+  color: #202536;
+}
+
+header {
+  background: #111827;
+  color: white;
+  padding: 22px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: bold;
+  color: #fbbf24;
+}
+
+header span {
+  font-size: 12px;
+}
+
+.hero {
+  background: linear-gradient(135deg,#111827,#374151);
+  color: white;
+  padding: 28px 18px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 27px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #d1d5db;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 16px;
+}
+
+.card {
+  background: white;
+  border-radius: 15px;
+  padding: 19px;
+  margin-bottom: 17px;
+  box-shadow: 0 3px 15px #0000000d;
+}
+
+h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin: 12px 0 7px;
+}
+
+input, select {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 9px;
+  font-size: 15px;
+  background: white;
+}
+
+button {
+  border: none;
+  padding: 14px;
+  border-radius: 9px;
+  background: #fbbf24;
+  color: #111827;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+.main-btn {
+  width: 100%;
+  margin-top: 18px;
+}
+
+.cabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.cab {
+  border: 2px solid #e5e7eb;
+  padding: 14px 7px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.cab.selected {
+  border-color: #fbbf24;
+  background: #fffbeb;
+}
+
+.cab .car {
+  font-size: 35px;
+}
+
+.cab h3 {
+  margin: 7px 0;
+}
+
+.cab p {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.fare {
+  background: #fffbeb;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+  line-height: 2;
+}
+
+.fare strong {
+  color: #b45309;
+}
+
+.success {
+  background: #dcfce7;
+  color: #166534;
+  padding: 14px;
+  border-radius: 10px;
+  margin-top: 15px;
+  display: none;
+}
+
+.booking {
+  border: 1px solid #e5e7eb;
+  padding: 13px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.small-btn {
+  padding: 8px 12px;
+  font-size: 13px;
+  margin-top: 7px;
+  margin-right: 5px;
+}
+
+.danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+footer {
+  text-align: center;
+  background: #111827;
+  color: white;
+  padding: 22px;
+  margin-top: 25px;
+}
+
+.hidden {
+  display: none;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">🚕 RS CAB</div>
+  <span>YOUR RIDE, YOUR WAY</span>
+</header>
+
+<section class="hero">
+  <h1>Welcome to RS CAB</h1>
+  <p>Book Your Ride Anytime, Anywhere</p>
+</section>
+
+<div class="container">
+
+<!-- CUSTOMER LOGIN -->
+
+<div class="card">
+  <h2>👤 Customer Details</h2>
+
+  <label>Your Name</label>
+  <input id="name" placeholder="Enter your name">
+
+  <label>Mobile Number</label>
+  <input id="phone" type="tel"
+  maxlength="10" placeholder="10 digit mobile number">
+</div>
+
+<!-- BOOKING -->
+
+<div class="card">
+  <h2>📍 Book Your Ride</h2>
+
+  <label>Pickup Location</label>
+  <input id="pickup" placeholder="Enter pickup location">
+
+  <label>Drop Location</label>
+  <input id="drop" placeholder="Enter drop location">
+
+  <label>Travel Distance (KM)</label>
+  <input id="distance" type="number"
+  min="1" placeholder="Enter distance in KM">
+
+  <h2 style="margin-top:22px">🚘 Select Your Cab</h2>
+
+  <div class="cabs">
+
+    <div class="cab selected" data-type="Bike"
+    onclick="selectCab(this)">
+      <div class="car">🏍️</div>
+      <h3>Bike</h3>
+      <p>₹10 / KM</p>
+    </div>
+
+    <div class="cab" data-type="Mini"
+    onclick="selectCab(this)">
+      <div class="car">🚕</div>
+      <h3>Mini</h3>
+      <p>₹15 / KM</p>
+    </div>
+
+    <div class="cab" data-type="Sedan"
+    onclick="selectCab(this)">
+      <div class="car">🚖</div>
+      <h3>Sedan</h3>
+      <p>₹20 / KM</p>
+    </div>
+
+    <div class="cab" data-type="SUV"
+    onclick="selectCab(this)">
+      <div class="car">🚙</div>
+      <h3>SUV</h3>
+      <p>₹25 / KM</p>
+    </div>
+
+  </div>
+
+  <div class="fare">
+    Distance: <strong id="showDistance">0 KM</strong><br>
+    Cab: <strong id="showCab">Bike</strong><br>
+    Estimated Fare: <strong id="showFare">₹0</strong>
+  </div>
+
+  <button class="main-btn" onclick="calculateFare()">
+    Calculate Fare
+  </button>
+
+  <button class="main-btn" onclick="bookRide()">
+    🚕 CONFIRM BOOKING
+  </button>
+
+  <div class="success" id="success"></div>
+
+</div>
+
+<!-- MY BOOKINGS -->
+
+<div class="card">
+  <h2>📋 My Bookings</h2>
+  <div id="myBookings">
+    No bookings yet.
+  </div>
+</div>
+
+<!-- ADMIN -->
+
+<div class="card">
+  <h2>🔐 Admin Panel</h2>
+
+  <label>Admin Password</label>
+  <input type="password" id="adminPassword"
+  placeholder="Enter admin password">
+
+  <button class="main-btn" onclick="adminLogin()">
+    Admin Login
+  </button>
+
+  <div id="adminPanel" class="hidden">
+    <h2 style="margin-top:20px">All Bookings</h2>
+    <div id="allBookings"></div>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <h3>RS CAB 🚕</h3>
+  <p>Safe Ride | Best Service | Affordable Price</p>
+  <p>© 2026 RS BSC COMPANY</p>
+</footer>
+
+<script>
+
+let selectedCab = "Bike";
+
+const rates = {
+  Bike: 10,
+  Mini: 15,
+  Sedan: 20,
+  SUV: 25
+};
+
+function selectCab(element) {
+  document.querySelectorAll(".cab").forEach(c => {
+    c.classList.remove("selected");
+  });
+
+  element.classList.add("selected");
+  selectedCab = element.dataset.type;
+
+  calculateFare();
+}
+
+function calculateFare() {
+
+  let distance = Number(
+    document.getElementById("distance").value
+  );
+
+  let fare = distance * rates[selectedCab];
+
+  document.getElementById("showDistance").innerText =
+    distance + " KM";
+
+  document.getElementById("showCab").innerText =
+    selectedCab;
+
+  document.getElementById("showFare").innerText =
+    "₹" + (distance > 0 ? fare : 0);
+
+  return fare;
+}
+
+function getBookings() {
+  return JSON.parse(
+    localStorage.getItem("rsCabBookings") || "[]"
+  );
+}
+
+function saveBookings(bookings) {
+  localStorage.setItem(
+    "rsCabBookings",
+    JSON.stringify(bookings)
+  );
+}
+
+function bookRide() {
+
+  let name = document.getElementById("name").value.trim();
+  let phone = document.getElementById("phone").value.trim();
+  let pickup = document.getElementById("pickup").value.trim();
+  let drop = document.getElementById("drop").value.trim();
+  let distance = Number(
+    document.getElementById("distance").value
+  );
+
+  let fare = calculateFare();
+
+  if (!name || !phone || !pickup || !drop || !distance) {
+    alert("Please fill all booking details!");
+    return;
+  }
+
+  if (!/^[0-9]{10}$/.test(phone)) {
+    alert("Enter a valid 10 digit mobile number!");
+    return;
+  }
+
+  if (!Number.isFinite(distance) || distance <= 0 ||
+      distance > 10000) {
+    alert("Enter a valid distance!");
+    return;
+  }
+
+  let booking = {
+    id: "RSCAB" + Date.now(),
+    name: name,
+    phone: phone,
+    pickup: pickup,
+    drop: drop,
+    distance: distance,
+    cab: selectedCab,
+    fare: fare,
+    status: "Pending",
+    date: new Date().toLocaleString()
+  };
+
+  let bookings = getBookings();
+  bookings.unshift(booking);
+  saveBookings(bookings);
+
+  document.getElementById("success").style.display = "block";
+  document.getElementById("success").innerHTML =
+    "✅ Booking Successful!<br>" +
+    "Booking ID: " + booking.id +
+    "<br>Estimated Fare: ₹" + fare;
+
+  showMyBookings();
+  showAdminBookings();
+
+}
+
+function showMyBookings() {
+
+  let bookings = getBookings();
+  let phone = document.getElementById("phone").value.trim();
+
+  let my = bookings.filter(b => b.phone === phone);
+
+  let html = "";
+
+  my.forEach(b => {
+    html += `
+      <div class="booking">
+        <b>${b.cab} - ₹${b.fare}</b><br>
+        Booking ID: ${b.id}<br>
+        From: ${escapeHTML(b.pickup)}<br>
+        To: ${escapeHTML(b.drop)}<br>
+        Status: ${b.status}<br>
+        Date: ${b.date}
+      </div>
+    `;
+  });
+
+  document.getElementById("myBookings").innerHTML =
+    html || "No bookings found.";
+}
+
+function adminLogin() {
+
+  let password =
+    document.getElementById("adminPassword").value;
+
+  if (password === "123456") {
+
+    document.getElementById("adminPanel")
+      .classList.remove("hidden");
+
+    showAdminBookings();
+
+    alert("Admin Login Successful!");
+
+  } else {
+    alert("Wrong Admin Password!");
+  }
+
+}
+
+function showAdminBookings() {
+
+  let bookings = getBookings();
+
+  let html = "";
+
+  bookings.forEach(b => {
+
+    html += `
+      <div class="booking">
+        <b>${escapeHTML(b.name)}</b><br>
+        Phone: ${b.phone}<br>
+        Cab: ${b.cab}<br>
+        Pickup: ${escapeHTML(b.pickup)}<br>
+        Drop: ${escapeHTML(b.drop)}<br>
+        Distance: ${b.distance} KM<br>
+        Fare: ₹${b.fare}<br>
+        Status: <b>${b.status}</b><br>
+
+        <button class="small-btn"
+        onclick="updateStatus('${b.id}','Accepted')">
+        Accept
+        </button>
+
+        <button class="small-btn danger"
+        onclick="updateStatus('${b.id}','Cancelled')">
+        Cancel
+        </button>
+
+        <button class="small-btn"
+        onclick="updateStatus('${b.id}','Completed')">
+        Complete
+        </button>
+      </div>
+    `;
+
+  });
+
+  document.getElementById("allBookings").innerHTML =
+    html || "No bookings available.";
+
+}
+
+function updateStatus(id, status) {
+
+  let bookings = getBookings();
+
+  bookings = bookings.map(b => {
+    if (b.id === id) {
+      b.status = status;
+    }
+    return b;
+  });
+
+  saveBookings(bookings);
+
+  showAdminBookings();
+  showMyBookings();
+
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, function(c) {
+    return {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[c];
+  });
+}
+
+document.getElementById("phone").addEventListener(
+  "input", showMyBookings
+);
+
+document.getElementById("distance").addEventListener(
+  "input", calculateFare
+);
+
+</script>
+
+</body>
+</html>
